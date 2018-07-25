@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+//use PlayersTableSeeder;
+//use UnitTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call(PlayersTableSeeder::class);
+        $this->call(UnitTableSeeder::class);
+        $this->call(AugmentUnitTableSeeder::class);
+
+
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace laract;
 
 use Illuminate\Database\Eloquent\Model;
 
