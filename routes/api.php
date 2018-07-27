@@ -54,6 +54,10 @@ Route::delete('units/{unit}', 'UnitController@delete');
 
 Route::get('units', 'UnitController@index');
 
+Route::get('heroes', 'UnitController@heroes');
+
+Route::get('monsters', 'UnitController@monsters');
+
 Route::get('units/{unit}', 'UnitController@show');
 
 Route::post('units','UnitController@store');

@@ -15,6 +15,17 @@ class UnitController extends Controller
         return Unit::all();
     }
 
+    public function heroes()
+    {
+
+        return Unit::where('isHero', true)->get()->toArray();
+    }
+
+    public function monsters()
+    {
+        return Unit::where('isHero', false)->get()->toArray();
+    }
+
     public function show(Unit $unit)
     {
         return $unit;

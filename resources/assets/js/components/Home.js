@@ -16,7 +16,10 @@ class Home extends Component {
         //Initialize the state in the constructor
         this.state = {
             units: [],
-            currentUnit: null
+            heroes: [],
+            monsters: [],
+            currentUnit: null,
+            currentMonster: null
         }
         this.handleUnitClick = this.handleUnitClick.bind(this);
     }
@@ -25,21 +28,32 @@ class Home extends Component {
      */
     componentDidMount() {
         /* fetch API in action */
-        fetch('/api/units')
+        fetch('/api/heroes')
             .then(response => {
                 console.log(response);
                 return response.json();
             })
-            .then(units => {
+            .then(heroes => {
+                //Fetched unit is stored in the state
+
+                if (this.refs.myRef)//what is this line for?
+                    this.setState({ heroes });
+            });
+        fetch('/api/monsters')
+            .then(response => {
+                console.log(response);
+                return response.json();
+            })
+            .then(monsters => {
                 //Fetched unit is stored in the state
 
                 if (this.refs.myRef)
-                    this.setState({ units });
+                    this.setState({ monsters });
             });
     }
 
-    renderUnits() {
-        return this.state.units.map(unit => {
+    renderHeroes() {
+        return this.state.heroes.map(unit => {
             return (
                 /* When using list you need to specify a key
                  * attribute that is unique for each list item
@@ -50,6 +64,21 @@ class Home extends Component {
                 </li>
             );
         })
+    }
+    renderMonsters() {
+        console.log(typeof (this.state.monsters));
+
+        return this.state.monsters ? this.state.monsters.map(monster => {
+            return (
+                /* When using list you need to specify a key
+                 * attribute that is unique for each list item
+                */
+                <li onClick={
+                    () =>this.handleUnitClick(monster)} key={monster.id} >
+                    {monster.id} : { monster.name }
+                </li>
+            );
+        }) : "loading...";
     }
 
     handleUnitClick(unit) {
@@ -76,12 +105,21 @@ class Home extends Component {
         return (
             <div ref="myRef">
                 {/* The button will execute the handler function set by the parent component */}
+
+                <div className="monsterDiv">
+                    {this.state.monsters ?
+                        <span>{ this.renderMonsters() }</span> :
+                        <span>Loading...</span>
+                    }
+
+                </div>
+
                 ChangeState Button<Button myFunction={this.props.parentFunction} />
                 <div className="mainDivStyle">
                     <div className="divStyle">
-                        <h3> All the Units </h3>
+                        <h3> All the Heroes </h3>
                         <ul>
-                            { this.renderUnits() }
+                            { this.renderHeroes() }
                         </ul>
 
                     </div>

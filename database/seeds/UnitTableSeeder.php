@@ -42,5 +42,29 @@ class UnitTableSeeder extends Seeder
             $params["initial_symbiosis"] = "";
             $newUnit = Unit::createWithAttributes($params);
         }
+        for ($i = 0; $i < 1; $i++) {
+            $params = [];//was obj, now array
+            $params["isHero"] = false;
+            $params["name"] = $faker->name;
+            $params["level"] = mt_rand(4,6);
+
+            $params["stat_evocation"] = 2;//mt_rand(2, 2),
+            $params["stat_abjuration"] = 2;//mt_rand(2, 2),
+            $params["stat_divination"] = 2;//mt_rand(2, 2),
+            $params["stat_transmutation"] = 2;//mt_rand(2, 2),
+            $params["stat_symbiosis"] = 2;//mt_rand(2, 2),
+
+            $params["convert_evocation"] = "";
+            $params["convert_abjuration"] = "";
+            $params["convert_divination"] = "";
+            $params["convert_transmutation"] = "";
+            $params["convert_symbiosis"] = "";
+            $params["initial_evocation"] = "";
+            $params["initial_abjuration"] = "";
+            $params["initial_divination"] = "";
+            $params["initial_transmutation"] = "";
+            $params["initial_symbiosis"] = "";
+            $newUnit = Unit::createWithAttributes($params);
+        }
     }
 }

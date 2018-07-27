@@ -17,11 +17,31 @@ const Unit = ({unit}) => {
 
         return(<div style={divStyle}><h2>  No Unit was selected </h2> </div>);
     }
-    var converts_evo_array = JSON.parse('[["convert","evocation","Defense",1],["convert","evocation","Attack",1]]');
+    var converts_evo_array = JSON.parse('[["convert","evocation","Defense",1],["convert","evocation","Attack",1]]').map(function(item, i){
+        return <li key={i}>{item[2]} {item[3]}</li>
+    });
+
+    this.parseAugments = function(augmentsString){
+        if(augmentsString == null || (augmentsString).trim() == "")
+            return "";
+
+        return JSON.parse(augmentsString).map(function(item, i){
+            return <li key={i}>{item[2]} {item[3]}</li>
+        });
+    }
+    this.displayConvert_evocation = this.parseAugments(unit.convert_evocation);
+    this.displayConvert_abjuration = this.parseAugments(unit.convert_abjuration);
+    this.displayConvert_divination = this.parseAugments(unit.convert_divination);
+    this.displayConvert_transmutation = this.parseAugments(unit.convert_transmutation);
+    this.displayConvert_symbiosis = this.parseAugments(unit.convert_symbiosis);
+
+
+
+
     //var evo_convert = conv
     //Else, display the unit data
     return(
-        <div style={divStyle} class="unitSelectedable">
+        <div style={divStyle} className="unitSelectedable">
             <h2> {unit.name} </h2>
             <p> {unit.level} </p>
             <h3> Stats 2 </h3>
@@ -31,14 +51,15 @@ const Unit = ({unit}) => {
                 <li>Divination: {unit.stat_divination}</li>
                 <li>Transmutation: {unit.stat_transmutation}</li>
                 <li>Symbiosis: {unit.stat_symbiosis}</li>
-                <li><ul>convert_evocation: {converts_evo_array}</ul></li>
-                <li>convert_abjuration: {unit.convert_abjuration}</li>
-                <li>convert_divination: {unit.convert_divination}</li>
-                <li>convert_transmutation: {unit.convert_transmutation}</li>
-                <li>convert_symbiosis: {unit.convert_symbiosis}</li>
+                <li>convert_evocation: <ul>{this.displayConvert_evocation}</ul></li>
+                <li>convert_abjuration: <ul>{this.displayConvert_abjuration}</ul></li>
+                <li>convert_divination: <ul>{this.displayConvert_divination}</ul></li>
+                <li>convert_transmutation: <ul>{this.displayConvert_transmutation}</ul></li>
+                <li>convert_symbiosis: <ul>{this.displayConvert_symbiosis}</ul></li>
             </ul>
         </div>
     )
+
 }
 
 export default Unit ;

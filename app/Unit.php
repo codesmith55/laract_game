@@ -93,12 +93,20 @@ class Unit extends Model
         $default = [];
         $default["name"] = $faker->name;
         $default["isHero"] = 0;
-        $default["level"] = mt_rand(2, 4);
+        $default["level"] = mt_rand(4, 7);
         $default["stat_evocation"] = 2;//mt_rand(2, 2),
         $default["stat_abjuration"] = 2;//mt_rand(2, 2),
         $default["stat_divination"] = 2;//mt_rand(2, 2),
         $default["stat_transmutation"] = 2;//mt_rand(2, 2),
         $default["stat_symbiosis"] = 2;//mt_rand(2, 2),
+
+        $defAugments = [];
+        $defAugments["evocation"] = [];
+        $defAugments["abjuration"] = [];
+        $defAugments["divination"] = [];
+        $defAugments["transmutation"] = [];
+        $defAugments["symbiosis"] = [];
+        $default["augments"] = $defAugments;
 
         $default["convert_evocation"] = "";
         $default["convert_abjuration"] = "";
@@ -184,6 +192,11 @@ class Unit extends Model
 
         }
 
+/*        $existingAugmentsString = $this["augments"];
+        $existingAugmentsArray = json_decode($existingAugmentsString);
+        $existingAugmentsArray[$augment["initial"]["trigger"]][$augmentType] = [$augment["output"]]
+  */
+
         $existingInitialString = $this["initial_".$augmentType];
         $existingInitialArray = json_decode($existingInitialString);
         $initialEffect = $augment["initial"];
@@ -195,16 +208,16 @@ class Unit extends Model
         );
         $this["initial_".$augmentType] = json_encode($existingInitialArray);
 
-        $existingConvertString = $this["ionvert_".$augmentType];
+        $existingConvertString = $this["convert_".$augmentType];
         $existingConvertArray = json_decode($existingConvertString);
-        $ConvertEffect = $augment["convert"];
+        $convertEffect = $augment["convert"];
         $existingConvertArray[] = array(
-            $ConvertEffect["trigger"],
-            $ConvertEffect["input"],
-            $ConvertEffect["type"],
-            $ConvertEffect["output"]
+            $convertEffect["trigger"],
+            $convertEffect["input"],
+            $convertEffect["type"],
+            $convertEffect["output"]
         );
-        $this["Convert_".$augmentType] = json_encode($existingConvertArray);
+        $this["convert_".$augmentType] = json_encode($existingConvertArray);
 
 
         //array_push($this["convert_".$augmentType], ($augment->convert));

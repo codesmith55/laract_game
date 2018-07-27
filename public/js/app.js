@@ -53828,6 +53828,8 @@ module.exports = ReactDOMInvalidARIAHook;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__GameTurn__ = __webpack_require__(222);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__StartGame__ = __webpack_require__(223);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Button__ = __webpack_require__(224);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -53858,7 +53860,10 @@ var Home = function (_Component) {
 
         _this.state = {
             units: [],
-            currentUnit: null
+            heroes: [],
+            monsters: [],
+            currentUnit: null,
+            currentMonster: null
         };
         _this.handleUnitClick = _this.handleUnitClick.bind(_this);
         return _this;
@@ -53874,21 +53879,30 @@ var Home = function (_Component) {
             var _this2 = this;
 
             /* fetch API in action */
-            fetch('/api/units').then(function (response) {
+            fetch('/api/heroes').then(function (response) {
                 console.log(response);
                 return response.json();
-            }).then(function (units) {
+            }).then(function (heroes) {
                 //Fetched unit is stored in the state
 
-                if (_this2.refs.myRef) _this2.setState({ units: units });
+                if (_this2.refs.myRef) //what is this line for?
+                    _this2.setState({ heroes: heroes });
+            });
+            fetch('/api/monsters').then(function (response) {
+                console.log(response);
+                return response.json();
+            }).then(function (monsters) {
+                //Fetched unit is stored in the state
+
+                if (_this2.refs.myRef) _this2.setState({ monsters: monsters });
             });
         }
     }, {
-        key: 'renderUnits',
-        value: function renderUnits() {
+        key: 'renderHeroes',
+        value: function renderHeroes() {
             var _this3 = this;
 
-            return this.state.units.map(function (unit) {
+            return this.state.heroes.map(function (unit) {
                 return (
                     /* When using list you need to specify a key
                      * attribute that is unique for each list item
@@ -53904,6 +53918,30 @@ var Home = function (_Component) {
                     )
                 );
             });
+        }
+    }, {
+        key: 'renderMonsters',
+        value: function renderMonsters() {
+            var _this4 = this;
+
+            console.log(_typeof(this.state.monsters));
+
+            return this.state.monsters ? this.state.monsters.map(function (monster) {
+                return (
+                    /* When using list you need to specify a key
+                     * attribute that is unique for each list item
+                    */
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'li',
+                        { onClick: function onClick() {
+                                return _this4.handleUnitClick(monster);
+                            }, key: monster.id },
+                        monster.id,
+                        ' : ',
+                        monster.name
+                    )
+                );
+            }) : "loading...";
         }
     }, {
         key: 'handleUnitClick',
@@ -53934,6 +53972,19 @@ var Home = function (_Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { ref: 'myRef' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'monsterDiv' },
+                    this.state.monsters ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'span',
+                        null,
+                        this.renderMonsters()
+                    ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'span',
+                        null,
+                        'Loading...'
+                    )
+                ),
                 'ChangeState Button',
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__Button__["a" /* default */], { myFunction: this.props.parentFunction }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -53945,12 +53996,12 @@ var Home = function (_Component) {
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'h3',
                             null,
-                            ' All the Units '
+                            ' All the Heroes '
                         ),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'ul',
                             null,
-                            this.renderUnits()
+                            this.renderHeroes()
                         )
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Unit__["a" /* default */], { unit: this.state.currentUnit })
@@ -53979,6 +54030,8 @@ if (document.getElementById('root')) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+var _this = this;
+
 
 
 /* Stateless component or pure component
@@ -54008,12 +54061,40 @@ var Unit = function Unit(_ref) {
             ' '
         );
     }
-    var converts_evo_array = JSON.parse('[["convert","evocation","Defense",1],["convert","evocation","Attack",1]]');
+    var converts_evo_array = JSON.parse('[["convert","evocation","Defense",1],["convert","evocation","Attack",1]]').map(function (item, i) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'li',
+            { key: i },
+            item[2],
+            ' ',
+            item[3]
+        );
+    });
+
+    _this.parseAugments = function (augmentsString) {
+        if (augmentsString == null || augmentsString.trim() == "") return "";
+
+        return JSON.parse(augmentsString).map(function (item, i) {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'li',
+                { key: i },
+                item[2],
+                ' ',
+                item[3]
+            );
+        });
+    };
+    _this.displayConvert_evocation = _this.parseAugments(unit.convert_evocation);
+    _this.displayConvert_abjuration = _this.parseAugments(unit.convert_abjuration);
+    _this.displayConvert_divination = _this.parseAugments(unit.convert_divination);
+    _this.displayConvert_transmutation = _this.parseAugments(unit.convert_transmutation);
+    _this.displayConvert_symbiosis = _this.parseAugments(unit.convert_symbiosis);
+
     //var evo_convert = conv
     //Else, display the unit data
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
-        { style: divStyle, 'class': 'unitSelectedable' },
+        { style: divStyle, className: 'unitSelectedable' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'h2',
             null,
@@ -54069,36 +54150,52 @@ var Unit = function Unit(_ref) {
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'li',
                 null,
+                'convert_evocation: ',
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'ul',
                     null,
-                    'convert_evocation: ',
-                    converts_evo_array
+                    _this.displayConvert_evocation
                 )
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'li',
                 null,
                 'convert_abjuration: ',
-                unit.convert_abjuration
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'ul',
+                    null,
+                    _this.displayConvert_abjuration
+                )
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'li',
                 null,
                 'convert_divination: ',
-                unit.convert_divination
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'ul',
+                    null,
+                    _this.displayConvert_divination
+                )
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'li',
                 null,
                 'convert_transmutation: ',
-                unit.convert_transmutation
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'ul',
+                    null,
+                    _this.displayConvert_transmutation
+                )
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'li',
                 null,
                 'convert_symbiosis: ',
-                unit.convert_symbiosis
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'ul',
+                    null,
+                    _this.displayConvert_symbiosis
+                )
             )
         )
     );
