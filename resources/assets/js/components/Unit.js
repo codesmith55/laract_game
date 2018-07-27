@@ -17,6 +17,8 @@ const Unit = ({unit}) => {
 
         return(<div style={divStyle}><h2>  No Unit was selected </h2> </div>);
     }
+    var converts_evo_array = JSON.parse('[["convert","evocation","Defense",1],["convert","evocation","Attack",1]]');
+    //var evo_convert = conv
     //Else, display the unit data
     return(
         <div style={divStyle} class="unitSelectedable">
@@ -29,7 +31,7 @@ const Unit = ({unit}) => {
                 <li>Divination: {unit.stat_divination}</li>
                 <li>Transmutation: {unit.stat_transmutation}</li>
                 <li>Symbiosis: {unit.stat_symbiosis}</li>
-                <li>convert_evocation: {unit.convert_evocation}</li>
+                <li><ul>convert_evocation: {converts_evo_array}</ul></li>
                 <li>convert_abjuration: {unit.convert_abjuration}</li>
                 <li>convert_divination: {unit.convert_divination}</li>
                 <li>convert_transmutation: {unit.convert_transmutation}</li>

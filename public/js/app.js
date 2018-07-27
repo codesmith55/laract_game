@@ -54008,6 +54008,8 @@ var Unit = function Unit(_ref) {
             ' '
         );
     }
+    var converts_evo_array = JSON.parse('[["convert","evocation","Defense",1],["convert","evocation","Attack",1]]');
+    //var evo_convert = conv
     //Else, display the unit data
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
@@ -54067,8 +54069,12 @@ var Unit = function Unit(_ref) {
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'li',
                 null,
-                'convert_evocation: ',
-                unit.convert_evocation
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'ul',
+                    null,
+                    'convert_evocation: ',
+                    converts_evo_array
+                )
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'li',
